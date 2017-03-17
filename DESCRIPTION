@@ -1,8 +1,8 @@
 Package: GFA
 Type: Package
 Title: Group Factor Analysis
-Version: 1.0.0
-Date: 2016-09-09
+Version: 1.0.1
+Date: 2017-03-13
 Authors@R: c(person("Eemeli", "Leppaaho", role = c("aut","cre"),
 			email = "eemeli.leppaaho@aalto.fi"),
 		person("Seppo", "Virtanen", role = c("aut"),
@@ -25,9 +25,10 @@ Author: Eemeli Leppaaho [aut, cre],
   Inka Saarinen [ctb],
   Samuel Kaski [ctb]
 Maintainer: Eemeli Leppaaho <eemeli.leppaaho@aalto.fi>
-Description: Factor analysis implementation for multiple data sources, i.e., for groups of variables. The whole data analysis pipeline is provided, including functions and recommendations for data normalization and model definition, as well as missing value prediction and model visualization. The model group factor analysis (GFA) is inferred with Gibbs sampling.
+Description: Factor analysis implementation for multiple data sources, i.e., for groups of variables. The whole data analysis pipeline is provided, including functions and recommendations for data normalization and model definition, as well as missing value prediction and model visualization. The model group factor analysis (GFA) is inferred with Gibbs sampling, and it has been presented originally by Virtanen et al. (2012), and extended in Klami et al. (2015) <DOI:10.1109/TNNLS.2014.2376974> and Bunte et al. (2016) <DOI:10.1093/bioinformatics/btw207>; for details, see the citation info.
 License: MIT + file LICENSE
+RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2016-10-11 13:01:54 UTC; eleppaah
+Packaged: 2017-03-17 11:47:05 UTC; eleppaah
 Repository: CRAN
-Date/Publication: 2016-10-11 18:56:42
+Date/Publication: 2017-03-17 13:01:18 UTC

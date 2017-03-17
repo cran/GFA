@@ -167,8 +167,8 @@ plotModel <- function(toy,res,predY) {
         text(1.13-m/10,0,txt,srt=270,adj=1)
       }
       cat("Component strength plot (inferred):
-  clearly GFA can infer the correct component affiliations accurately. Components 7 and 8
-  have fitted to residual noise, and are significantly weaker than the 'true components'.
+  clearly GFA can infer the correct component affiliations accurately. Components starting
+  from 7 have fitted to residual noise, and are significantly weaker than the 'true components'.
   Additionaly PTVEs are shown for doing sequential prediction from new observations of
   data source 3 to sources 1 and 2.\n")
     } else {

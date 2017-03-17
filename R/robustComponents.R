@@ -15,9 +15,9 @@
 #' 
 #' @param models Either a vector containing the file names, where the models are
 #'   saved as 'res', or a list containing the models.
-#' @param corTrh How close two components are required to be, in terms of
+#' @param corThr How close two components are required to be, in terms of
 #'   correlation, in order to match them.
-#' @param matchTrh How big proportion of the chains need to contain the
+#' @param matchThr How big proportion of the chains need to contain the
 #'   component to include it in the robust components.
 #' @return A list with the following elements (when input data are paired in two
 #'   modes, the returned list is of length 2, containing the following elements
@@ -43,8 +43,8 @@
 #' res <- list()
 #' for(i in 1:4) res[[i]] <- gfa(list(Y[,1:6],Y[,7:15]),opts=opts,K=3)
 #' rob <- robustComponents(res)
-robustComponents <- function(models,corTrh=0.90, matchTrh=0.5) {
-  if(length(models)<2) stop("Several sampling chains are needed.")
+robustComponents <- function(models,corThr=0.90, matchThr=0.5) {
+  if(length(models)<2) stop("Several sampling chains are needed in input parameter 'models'.")
   maxK <- c(0,0)
   comps <- list()
   reps <- length(models)
@@ -64,89 +64,85 @@ robustComponents <- function(models,corTrh=0.90, matchTrh=0.5) {
         V <- 1; N <- nrow(res$X); D <- nrow(res$W)
         dimnames[[1]] <- list(colnames(res$posterior$X),colnames(res$posterior$W))
       }
-
+      comps <- list()
+      for(v in 1:V) comps[[v]] <- list()
     }
-    comps[[rep]] <- list()
-    for(v in 1:V) comps[[rep]][[v]] <- list()
+    comps[[v]][[rep]] <- list()
     
     for(v in 1:V) {
       K <- res$K[v]
       maxK[v] <- max(K,maxK[v])
       for (k in 1:K) {
-        comp <- matrix(0, nrow = N[v], ncol = D[v])
-        for (post in 1:res$opts$iter.saved) {
-          if(V==1)
-            comp <- comp + tcrossprod(res$posterior$X[post,,k], res$posterior$W[post,,k])
-          else
-            comp <- comp + tcrossprod(res$posterior$X[[v]][post,,k], res$posterior$W[[v]][post,,k])
-        }
+        if(V==1)
+          comp <- crossprod(res$posterior$X[,,k], res$posterior$W[,,k]) #Sum over posterior samples
+        else
+          comp <- crossprod(res$posterior$X[[v]][,,k], res$posterior$W[[v]][,,k])
         comp <- comp / res$opts$iter.saved
-        comps[[rep]][[v]][[k]] <- comp
+        comps[[v]][[rep]][[k]] <- comp
       }
     }
   }
   
-  # matching and similarity
-  rob <- list(); empty <- matrix(NA,reps,0)
-  for(v in 1:V) rob[[v]] <- list(Krobust=0,effect=c(),indices=empty,cor=empty)
-  
+  # Matching and similarity
+  rob <- list()
   for(v in 1:V) {
-    compInc <- vector()
-    corList <- list()
-    for (rep1 in 1:reps) {
-      matching <- vector(length = maxK[v])
-      d <- array(NA, dim = c(maxK[v], reps))
-      matchInd <- matrix(0, nrow = maxK[v], ncol = reps)
-      for (k1 in 1:length(comps[[rep1]][[v]])) {
-        comp1 <- comps[[rep1]][[v]][[k1]]
-        #Component not used yet, and not empty
-        if (!(paste(rep1,k1) %in% compInc) & sum(comps[[rep1]][[v]][[k1]]) != 0) {
-          for (rep2 in 1:reps) {
-            for (k2 in 1:length(comps[[rep2]][[v]])) { #Find component from rep2 best matching k1 of rep1
-              if (!(paste(rep2,k2) %in% compInc)) { #Component not used yet
-                comp2 <- comps[[rep2]][[v]][[k2]]
-                distance <- cor(c(comp1), c(comp2))
-                if (!is.na(distance) && (is.na(d[k1,rep2]) || (distance > d[k1,rep2]))) {
-                  d[k1,rep2] <- distance
-                  if(distance > corTrh)
-                    matchInd[k1,rep2] <- k2
-                  else
-                    matchInd[k1,rep2] <- -k2 #Index saved for debugging purposes
-                }
-              }
-            }
-          }
-        }
-        
-        ind <- which(d[k1,] > corTrh) #Which chains are closer than the threshold
-        matching[k1] <- length(ind) #How many chains
-        
-        if(matching[k1] >= matchTrh*reps) {
-          # average over all similar components
-          robIndices <- robDist <- array(NA,dim=reps,dimnames=list(paste0("rep",1:reps)))
-          
-          Z_av <- vector(length = N[v])
-          W_av <- vector(length = D[v])
-          comp <- matrix(0, nrow = N[v], ncol = D[v])
-          for(rep2 in 1:reps) {
-            robDist[rep2] <- d[k1,rep2]
-            robIndices[rep2] <- matchInd[k1,rep2]
-            if(matchInd[k1,rep2] > 0) {
-              comp <- comp + comps[[rep2]][[v]][[matchInd[k1,rep2]]]
-              compInc <- c(compInc, paste(rep2,matchInd[k1,rep2]))
-            }
-          }
-          comp <- comp/sum(matchInd[k1,]>0)
-          rob[[v]]$Krobust <- rob[[v]]$Krobust + 1
-          rob[[v]]$effect <- array(c(rob[[v]]$effect, comp),dim=c(dim(comp),rob[[v]]$K),
-                                   dimnames=list(dimnames[[v]][[1]],dimnames[[v]][[2]],
-                                                 paste0("K",1:rob[[v]]$Krobust)))
-          rob[[v]]$indices <- cbind(rob[[v]]$indices, robIndices)
-          rob[[v]]$cor <- cbind(rob[[v]]$cor, robDist)
-        }
-      }
-    }
+    rob[[v]] <- matchComponents(comps=comps[[v]], maxK=maxK[v], N=N[v], D=D[v],
+                                dimnames=dimnames[[v]], corThr=corThr, matchThr=matchThr)
   }
+  
   if(V==1) rob <- rob[[1]]
   return(rob)
 }
+
+
+
+## Internal function for matching components
+matchComponents <- function(comps, maxK, N, D, dimnames, corThr, matchThr) {
+  corList <- list()
+  reps <- length(comps)
+  rob <- list(Krobust=0,effect=c(),indices=matrix(NA,reps,0),cor=matrix(NA,reps,0))
+  
+  compStorage <- vector("list",length=reps) #Store the components that can still be used
+  for(rep in 1:reps) compStorage[[rep]] <- which(sapply(comps[[rep]], function(x) {sum(abs(x)) > 0}))
+  
+  for (rep1 in 1:reps) {
+    matching <- vector(length = maxK)
+    sim <- array(NA, dim = c(maxK, reps))
+    matchInd <- matrix(0, nrow = maxK, ncol = reps)
+    
+    for (k1 in compStorage[[rep1]]) {
+      for (rep2 in which(sapply(compStorage, length)>0)) {
+        #Correlation between the two components.
+        #Note that we do not need to use the absolute values, as the correlation is computed in data space.
+        d <- sapply(comps[[rep2]][compStorage[[rep2]]], function(x) cor(c(x), c(comps[[rep1]][[k1]])))
+        sim[k1,rep2] <- max(d)
+        matchInd[k1,rep2] <- compStorage[[rep2]][which.max(d)]
+        if(sim[k1,rep2] < corThr) matchInd[k1,rep2] <- matchInd[k1,rep2]*-1 #Index saved for debugging purposes
+      }
+      
+      if(sum(sim[k1,]>corThr, na.rm=T) >= matchThr*reps) { #Robust component found!
+        # average over all similar components
+        comp <- matrix(0, N, D)
+        for(rep2 in which(matchInd[k1,] > 0)) {
+          comp <- comp + comps[[rep2]][[matchInd[k1,rep2]]]
+          compStorage[[rep2]] <- compStorage[[rep2]][!compStorage[[rep2]]==matchInd[k1,rep2]]
+        }
+        comp <- comp/sum(matchInd[k1,]>0)
+        
+        rob$Krobust <- rob$Krobust + 1
+        rob$effect <- array(c(rob$effect, comp),dim=c(dim(comp),rob$K),
+                            dimnames=list(dimnames[[1]],dimnames[[2]],
+                                          paste0("K",1:rob$Krobust)))
+        rob$indices <- cbind(rob$indices, matchInd[k1,])
+        rob$cor <- cbind(rob$cor, sim[k1,])
+      }
+    }
+  }
+  rownames(rob$indices) <- rownames(rob$cor) <- paste0("rep",1:reps)
+  colnames(rob$indices) <- colnames(rob$cor) <- paste0("K",1:rob$Krobust)
+  return(rob)
+}
+
+
+
+

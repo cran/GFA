@@ -45,14 +45,14 @@ vis <- visualizeComponents(res,Y,norm,hclust=TRUE)
 ## FIGURE CAPTIONS 
 # - Component activities: shows how strongly the 3 components are associated
 #   with different data sources. White (or close to white) elements show that
-#   a certain component is not (significantly) with a certain data source.
+#   a certain component is not associated with a certain data source.
 #   In this case GFA is able to infer the correct component number, but in
 #   general some components can be used to model (structured) noise as well.
 # - Data reconstruction: the factorization XW^T, showing how the components
 #   model the data collection.
-# - Component 2 effect: this is the bicluster component used in the data
-#   generation. It is correctly active mostly in drug sensitivity and gene
-#   expression, in a subset of the cell lines and drugs/genes.
+# - Component X effect: The component active mostly in drug sensitivity and gene
+#   expression, in a subset of the cell lines and drugs/genes, is a bicluster
+#   component used in the data generation.
 
 ## PREDICTION OF A MISSING VALUE
 cat(paste0("Missing drug sensitivity (cell line 7, drug B): ",round(missing,2),"\n",

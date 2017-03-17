@@ -23,7 +23,9 @@ is provided as demo(GFApipeline), and a more elaborate one as
 demo(GFAexample). Finally, the experiment presented in (Bunte, Leppaaho,
 Saarinen and Kaski: Sparse group factor analysis for biclustering of
 multiple data sources, Bioinformatics, 32(16):2457--2463, 2016) can
-be replicated with demo(GFAdream).
+be replicated with demo(GFAdream). Most of the computational complexity
+of the package is related to matrix operations, which can be parallelized
+inherently by using e.g. OpenBLAS libraries.
 }
 
 \keyword{ package }
