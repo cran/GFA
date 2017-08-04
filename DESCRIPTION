@@ -1,10 +1,10 @@
 Package: GFA
 Type: Package
 Title: Group Factor Analysis
-Version: 1.0.1
-Date: 2017-03-13
-Authors@R: c(person("Eemeli", "Leppaaho", role = c("aut","cre"),
-			email = "eemeli.leppaaho@aalto.fi"),
+Version: 1.0.3
+Date: 2017-08-04
+Authors@R: c(person("Eemeli", "Leppäaho", role = c("aut","cre"),
+			email = "eemeli.leppaaho@gmail.com"),
 		person("Seppo", "Virtanen", role = c("aut"),
 		     email = "s.virtanen@warwick.ac.uk"),
 		person("Muhammad", "Ammad-ud-din", role = "ctb",
@@ -17,18 +17,19 @@ Authors@R: c(person("Eemeli", "Leppaaho", role = c("aut","cre"),
 		     email = "inka.saarinen@aalto.fi"),
 		person("Samuel", "Kaski", role = "ctb",
 		     email = "samuel.kaski@aalto.fi"))
-Author: Eemeli Leppaaho [aut, cre],
+Author: Eemeli Leppäaho [aut, cre],
   Seppo Virtanen [aut],
   Muhammad Ammad-ud-din [ctb],
   Suleiman A Khan [ctb],
   Tommi Suvitaival [ctb],
   Inka Saarinen [ctb],
   Samuel Kaski [ctb]
-Maintainer: Eemeli Leppaaho <eemeli.leppaaho@aalto.fi>
+Maintainer: Eemeli Leppäaho <eemeli.leppaaho@gmail.com>
 Description: Factor analysis implementation for multiple data sources, i.e., for groups of variables. The whole data analysis pipeline is provided, including functions and recommendations for data normalization and model definition, as well as missing value prediction and model visualization. The model group factor analysis (GFA) is inferred with Gibbs sampling, and it has been presented originally by Virtanen et al. (2012), and extended in Klami et al. (2015) <DOI:10.1109/TNNLS.2014.2376974> and Bunte et al. (2016) <DOI:10.1093/bioinformatics/btw207>; for details, see the citation info.
 License: MIT + file LICENSE
+Encoding: latin1
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-03-17 11:47:05 UTC; eleppaah
+Packaged: 2017-08-04 07:12:25 UTC; eleppaah
 Repository: CRAN
-Date/Publication: 2017-03-17 13:01:18 UTC
+Date/Publication: 2017-08-04 08:53:59 UTC

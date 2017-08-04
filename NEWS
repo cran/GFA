@@ -2,3 +2,11 @@ Changes in GFA version 1.0.1
 
   o Improved code readability and modularity
 
+Changes in GFA version 1.0.2
+
+  o Fixed a small error in visualizeComponents, when number of modes is two.
+
+Changes in GFA version 1.0.3
+
+  o Updated citation info and maintainer email.
+

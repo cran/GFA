@@ -29,16 +29,16 @@ visualizeComponents <- function(model,Y=NULL,norm=NULL,mode=1,showAll=TRUE,hclus
   }
   
   V <- 1 #Number of modes the data is paired in
-  if(typeof("pred")=="list") {
+  K <- model$K
+  if(length(K)==2) {
     V <- 2
-    pred <- pred[[mode]]
     model$groups <- model$groups[[mode]]
     model$W <- model$W[[mode]]
     model$X <- model$X[[mode]]
-    model$K <- model$K[mode]
+    K <- K[mode]
     if(!is.null(Y)) Y <- Y[[mode]]
+    if(showAll) rec <- rec[[mode]]
   }
-  K <- model$K
   gr <- model$groups; M <- length(gr)
   if(is.null(names(gr))) names(gr) <- paste("Source",1:M)
   if(!is.null(Y)) Y <- do.call(cbind,Y)
