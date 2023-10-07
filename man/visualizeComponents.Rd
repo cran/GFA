@@ -4,9 +4,17 @@
 \alias{visualizeComponents}
 \title{Visualize GFA components}
 \usage{
-visualizeComponents(model, Y = NULL, norm = NULL, mode = 1,
-  showAll = TRUE, hclust = FALSE, topK = 3, topFeatures = NA,
-  topSamples = NA)
+visualizeComponents(
+  model,
+  Y = NULL,
+  norm = NULL,
+  mode = 1,
+  showAll = TRUE,
+  hclust = FALSE,
+  topK = 3,
+  topFeatures = NA,
+  topSamples = NA
+)
 }
 \arguments{
 \item{model}{The learned GFA model.}

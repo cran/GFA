@@ -10,3 +10,7 @@ Changes in GFA version 1.0.3
 
   o Updated citation info and maintainer email.
 
+Changes in GFA version 1.0.4
+
+  o Formatted DESCRIPTION and CITATION in UTF-8.
+
