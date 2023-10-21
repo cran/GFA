@@ -1,8 +1,8 @@
 Package: GFA
 Type: Package
 Title: Group Factor Analysis
-Version: 1.0.4
-Date: 2023-10-07
+Version: 1.0.5
+Date: 2023-10-21
 Authors@R: c(person("Eemeli", "Leppäaho", role = c("aut","cre"),
 			email = "eemeli.leppaaho@gmail.com"),
 		person("Seppo", "Virtanen", role = c("aut"),
@@ -30,6 +30,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-10-07 09:36:15 UTC; leppaahe
+Packaged: 2023-10-21 08:56:39 UTC; leppaahe
 Repository: CRAN
-Date/Publication: 2023-10-07 10:30:02 UTC
+Date/Publication: 2023-10-21 09:20:02 UTC
